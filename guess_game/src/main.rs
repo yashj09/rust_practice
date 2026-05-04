@@ -1,24 +1,32 @@
-use std::io;
-use rand:: RngExt;
+use rand::RngExt;
 use std::cmp::Ordering;
+use std::io;
 fn main() {
     println!("Guess the Number");
-let secret= rand::rng().random_range(1..=100);
-println!("the secret number is {secret}");
+    let secret = rand::rng().random_range(1..=100);
+    // println!("the secret number is {secret}");
 
+    loop {
+        println!("Please input a number");
 
-    println!("Please input a number");
+        let mut num = String::new();
 
-    let mut num= String::new();
+        io::stdin().read_line(&mut num).expect("input needed");
 
-    io::stdin().read_line(&mut num).expect("input needed");
-    let num:u32 = num.trim().parse().expect("need to be a number");
+        let num: u32 = match num.trim().parse() {
+            Ok(num) => num,
+            Err(_) => continue,
+        };
 
-    println!("You Guessed: {num}");
+        println!("You Guessed: {num}");
 
-    match num.cmp(&secret)  {
-        Ordering::Less =>println!("number too small"),
-        Ordering::Greater=> println!("number too big"),
-    Ordering::Equal => println!("You Win!")
+        match num.cmp(&secret) {
+            Ordering::Less => println!("number too small"),
+            Ordering::Greater => println!("number too big"),
+            Ordering::Equal => {
+                println!("you win");
+                break;
+            }
+        }
     }
 }
